@@ -12,7 +12,18 @@ const server = http.createServer(app);
 const io = new SocketServer(server);
 
 io.on("connection", (socket) => {
-  console.log("Client connected");
+  // console.log("Client connected");
+
+  // se inicializa la escucha de un evento
+  socket.on("message", (data) => {
+    console.log(data);
+
+    // emite un evento a todos los usuarios con conexion, con excepcion del que emite
+    socket.broadcast.emit("message", {
+      message: data,
+      from: socket.id.slice(6),
+    });
+  });
 });
 
 server.listen(3001);
